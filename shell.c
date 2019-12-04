@@ -12,6 +12,7 @@ char ** parse_args(char * line){
 
 static void sighandler(int signo){
   if (signo == SIGINT){
+    printf("Terminated");
     exit(0);
   }
 }
