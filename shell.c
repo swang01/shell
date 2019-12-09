@@ -8,11 +8,11 @@
 #include <sys/stat.h>
 #include <sys/wait.h>
 
-char ** parse_args(char * line){
-  char ** args = malloc(5 * sizeof(char *));
+char ** parse_args(char * line, char * delimiter){
+  char ** args = malloc(6 * sizeof(char *));
   int i = 0;
   while (line != NULL){
-    args[i] = strsep(&line," ");
+    args[i] = strsep(&line, delimiter);
     i++;
   }
   args[i] = NULL;

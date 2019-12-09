@@ -8,5 +8,5 @@
 #include <sys/stat.h>
 #include <sys/wait.h>
 
-char ** parse_args(char * line);
+char ** parse_args(char * line, char * delimiter);
 static void sighandler(int signo);
