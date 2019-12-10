@@ -1,7 +1,19 @@
 #include "header.h"
 
 int main(int argc, char *argv[]){
+  while(1){
     char *line;
+    char buffer[100];
+    printf("shell$ ");
+    fgets(buffer, 100, stdin);
+    buffer[strlen(buffer) - 1] = 0;
+    line = buffer;
+    char ** arg_array;
+    exec_command(buffer);
+  }
+  return 0;
+
+    /* char *line;
     char buffer[100];
     printf("shell$ ");
     fgets(buffer, 100, stdin);
@@ -41,7 +53,7 @@ int main(int argc, char *argv[]){
       }
     }
     return 0;
-/*  for (i = 0; i < sizeof(arg_array)/sizeof(arg_array[0]); i++){
+  for (i = 0; i < sizeof(arg_array)/sizeof(arg_array[0]); i++){
     execvp(arg_array[0], arg_array);
   } */
 
