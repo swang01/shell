@@ -12,3 +12,4 @@ char ** parse_args(char * line, char * delimiter);
 static void sighandler(int signo);
 void exec_command(char * command);
 int exec_multiple(char * command);
+char * trim(char * str);

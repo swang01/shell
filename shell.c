@@ -26,34 +26,31 @@ char ** parse_args(char * line, char * delimiter){
     return args;
 }
 
+char * trim(char * str){
+  int i = 0;
+  while (str[i] == ' '){
+    str[i] = str[i++];
+    i++;
+  }
+  printf("%s\n", str);
+}
+
 int exec_command(char * command){
-    char ** args = parse_args(command, " ");
-    int i =  0;
-    while (args[i] != NULL) {
-        if (strcmp(args[i], " ")){
-            printf("This is args[i] %s\n", args[i]);
-            int j = i;
-            while (args[j] != NULL) {
-                printf("This is args[j] %s\n", args[j]);
-                args[j] = args[j+1];
-                j++;
-            }
-        }
-        i++;
-    }
-    pid_t pid = fork();
-    if (pid == -1){
-        printf("Failed\n");
-        return 0;
-    } else if (!pid){
-        if (execvp(args[0], args) < 0){
-            printf("Could not execute\n");
-        }
-        exit(0);
-    } else {
-        wait(NULL);
-        return 0;
-    }
+  trim(command);
+  char ** args = parse_args(command, " ");
+  pid_t pid = fork();
+  if (pid == -1){
+      printf("Failed\n");
+      return 0;
+  } else if (!pid){
+      if (execvp(args[0], args) < 0){
+        printf("Could not execute\n");
+      }
+      exit(0);
+  } else {
+      wait(NULL);
+      return 0;
+  }
 }
 
 int exec_multiple(char * command){
