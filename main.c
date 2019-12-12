@@ -9,7 +9,8 @@ int main(int argc, char *argv[]){
     buffer[strlen(buffer) - 1] = 0;
     line = buffer;
     char ** arg_array;
-    exec_command(buffer);
+    int i;
+    exec_multiple(buffer);
   }
   return 0;
 
@@ -38,7 +39,6 @@ int main(int argc, char *argv[]){
         printf("-----\n");
         arg_array2 = parse_args(arg_array[a], " ");
         execvp(arg_array2[0], arg_array2);
-        /**
         int b = 0;
         while (arg_array2[b] != NULL){
             int f = fork();
@@ -59,11 +59,8 @@ int main(int argc, char *argv[]){
             }
             b++;
         }
-        **/
         a++;
     }
+    */
     return 0;
-    for (i = 0; i < sizeof(arg_array)/sizeof(arg_array[0]); i++){
-        execvp(arg_array[0], arg_array);
-    }
 }
