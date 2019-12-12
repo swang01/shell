@@ -38,12 +38,9 @@ char * trim(char * str) {
         output[strlen(str)-1] = 0;
     }
     for (i = 0; i < strlen(str); i++){
-        printf("Characters in str:%c\n", str[i]);
         if(str[i] == ' ' && str[i+1] == ' '){
             for(j = i; j < strlen(str); i++, j++) {
-                printf("This is the character in str:%c\n", str[i]);
                 output[j] = str[i+1];
-                printf("This is the character in output:%c\n", output[j]);
             }
         }
     }
@@ -52,18 +49,24 @@ char * trim(char * str) {
 
 int exec_command(char * command){
     command = trim(command);
+    printf("%s\n", command);
     char ** args = parse_args(command, " ");
     //debugging
     int i=0;
     while(args[i] != NULL){
-        printf("This is one element of the command:%s\n", args[i]);
         i++;
     }
     pid_t pid = fork();
     if (pid == -1){
         printf("Failed\n");
         return 0;
-    } else if (!pid){
+    } else if (pid == 0){
+      if (strchr(command, '<') != NULL){
+        redirect_in(0,args);
+      }
+      if (strchr(command, '>') != NULL){
+        redirect_out(0,args);
+      }
         if (execvp(args[0], args) < 0){
             printf("Could not execute\n");
         }
@@ -82,4 +85,26 @@ int exec_multiple(char * command){
         i++;
     }
     return 0;
+}
+
+void redirect_in(int argc, char ** args){
+  char *file = args[argc - 1];
+  args[argc - 2] = NULL;
+  int fd = open(file, O_RDONLY);
+  dup2(fd, STDIN_FILENO);
+  execvp(args[0], args);
+  printf("Failed\n");
+  close(fd);
+  exit(1);
+}
+
+void redirect_out(int argc, char ** args){
+  char *file = args[argc - 1];
+  args[argc - 2] = NULL;
+  int fd = open(file, O_CREAT | O_WRONLY | O_TRUNC, 0640);
+  dup2(fd, STDOUT_FILENO);
+  execvp(args[0], args);
+  printf("Failed\n");
+  close(fd);
+  exit(1);
 }
