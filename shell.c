@@ -26,31 +26,44 @@ char ** parse_args(char * line, char * delimiter){
     return args;
 }
 
-char * trim(char * str){
-  int i = 0;
-  while (str[i] == ' '){
-    str[i] = str[i++];
-    i++;
-  }
-  printf("%s\n", str);
+char * trim(char * str) {
+    int i,j;
+    char * output = str;
+    if (str[0] == ' '){
+        for(i = 1, j = 0; j < strlen(str); i++, j++) {
+            output[j] = str[i];
+        }
+    }
+    if (str[strlen(str)-1] == ' '){
+        output[strlen(str)-1] = 0;
+    }
+    return output;
 }
 
 int exec_command(char * command){
-  trim(command);
-  char ** args = parse_args(command, " ");
-  pid_t pid = fork();
-  if (pid == -1){
-      printf("Failed\n");
-      return 0;
-  } else if (!pid){
-      if (execvp(args[0], args) < 0){
-        printf("Could not execute\n");
-      }
-      exit(0);
-  } else {
-      wait(NULL);
-      return 0;
-  }
+    command = trim(command);
+    char ** args = parse_args(command, " ");
+    int i=0;
+    /*
+    //debugging purposes
+    while(args[i] != NULL){
+        printf("This is one element of the command:%s\n", args[i]);
+        i++;
+    }
+    */
+    pid_t pid = fork();
+    if (pid == -1){
+        printf("Failed\n");
+        return 0;
+    } else if (!pid){
+        if (execvp(args[0], args) < 0){
+            printf("Could not execute\n");
+        }
+        exit(0);
+    } else {
+        wait(NULL);
+        return 0;
+    }
 }
 
 int exec_multiple(char * command){
