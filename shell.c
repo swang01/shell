@@ -37,20 +37,28 @@ char * trim(char * str) {
     if (str[strlen(str)-1] == ' '){
         output[strlen(str)-1] = 0;
     }
+    for (i = 0; i < strlen(str); i++){
+        printf("Characters in str:%c\n", str[i]);
+        if(str[i] == ' ' && str[i+1] == ' '){
+            for(j = i; j < strlen(str); i++, j++) {
+                printf("This is the character in str:%c\n", str[i]);
+                output[j] = str[i+1];
+                printf("This is the character in output:%c\n", output[j]);
+            }
+        }
+    }
     return output;
 }
 
 int exec_command(char * command){
     command = trim(command);
     char ** args = parse_args(command, " ");
+    //debugging
     int i=0;
-    /*
-    //debugging purposes
     while(args[i] != NULL){
         printf("This is one element of the command:%s\n", args[i]);
         i++;
     }
-    */
     pid_t pid = fork();
     if (pid == -1){
         printf("Failed\n");

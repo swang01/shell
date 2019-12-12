@@ -7,9 +7,6 @@ int main(int argc, char *argv[]){
     printf("shell$ ");
     fgets(buffer, 100, stdin);
     buffer[strlen(buffer) - 1] = 0;
-    line = buffer;
-    char ** arg_array;
-    int i;
     exec_multiple(buffer);
   }
   return 0;
@@ -35,7 +32,7 @@ int main(int argc, char *argv[]){
 
     char ** arg_array2;
     int a = 0;
-    while(arg_array[a] != NULL){
+    while([a] != NULL){
         printf("-----\n");
         arg_array2 = parse_args(arg_array[a], " ");
         execvp(arg_array2[0], arg_array2);
@@ -62,5 +59,4 @@ int main(int argc, char *argv[]){
         a++;
     }
     */
-    return 0;
 }
