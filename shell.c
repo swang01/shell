@@ -115,19 +115,19 @@ void redirect_out(char * line){
   exit(1);
 }
 
-void pipes(char ** args){
-  FILE *in = popen(args[0], "r");
-  if (!in){
-    printf("%s\n", strerror(errno));
-  }
-  FILE *out = popen(args[1], "w");
-  if (!out){
-    printf("%s\n", strerror(errno));
-  }
-  char buffer[100];
-  while (fgets(buffer, 100, in)){
-    fputs(buffer, out);
-  }
-  pclose(in);
-  pclose(out);
+int pipes(char ** args){
+  char * input  = args[0];
+    char * output = args[1];
+    char line[256];
+    char cmd[256];
+    FILE *read = popen(input,"r");
+    while (fgets(line,256,read)) {
+      line[sizeof(line)-1] = 0;
+      strcat(cmd,line);
+    }
+    pclose(read);
+    FILE *write = popen(output,"w");
+    fprintf(write,"%s",cmd);
+    pclose(write);
+    return 0;
 }
