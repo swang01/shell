@@ -7,7 +7,9 @@ int main(int argc, char *argv[]){
     printf("shell$ ");
     fgets(buffer, 100, stdin);
     buffer[strlen(buffer) - 1] = 0;
-    exec_multiple(buffer);
+    if (exec_multiple(buffer) == 1){
+      return 0;
+    }
   }
   return 0;
 

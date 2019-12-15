@@ -62,11 +62,12 @@ int exec_command(char * command){
         return 0;
     } else if (pid == 0){
       if (strchr(command, '<') != NULL){
-        redirect_in(0,args);
+        redirect_in(command);
       }
       if (strchr(command, '>') != NULL){
-        redirect_out(0,args);
+        redirect_out(command);
       }
+      if (strcmp(args[0], "exit") == 0) exit(0);
         if (execvp(args[0], args) < 0){
             printf("Could not execute\n");
         }
@@ -87,10 +88,11 @@ int exec_multiple(char * command){
     return 0;
 }
 
-void redirect_in(int argc, char ** args){
-  char *file = args[argc - 1];
-  args[argc - 2] = NULL;
-  int fd = open(file, O_RDONLY);
+void redirect_in(char * line){
+  char ** parsed = parse_args(line, "<");
+  char ** args = parse_args(args[0], " ");
+  int fd = open(parsed[1], O_RDONLY, 0644);
+  dup(STDIN_FILENO);
   dup2(fd, STDIN_FILENO);
   execvp(args[0], args);
   printf("Failed\n");
@@ -98,10 +100,11 @@ void redirect_in(int argc, char ** args){
   exit(1);
 }
 
-void redirect_out(int argc, char ** args){
-  char *file = args[argc - 1];
-  args[argc - 2] = NULL;
-  int fd = open(file, O_CREAT | O_WRONLY | O_TRUNC, 0640);
+void redirect_out(char * line){
+  char ** parsed = parse_args(line, ">");
+  char ** args = parse_args(args[0], " ");
+  int fd = open(parsed[1], O_CREAT | O_WRONLY, 0644);
+  dup(STDOUT_FILENO);
   dup2(fd, STDOUT_FILENO);
   execvp(args[0], args);
   printf("Failed\n");
