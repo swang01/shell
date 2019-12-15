@@ -15,3 +15,4 @@ int exec_multiple(char * command);
 char * trim(char * str);
 void redirect_in(int argc, char ** args);
 void redirect_out(int argc, char ** args);
+void pipes(char ** args);

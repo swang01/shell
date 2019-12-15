@@ -67,6 +67,9 @@ int exec_command(char * command){
       if (strchr(command, '>') != NULL){
         redirect_out(command);
       }
+      if (strchr(command, "|") != NULL){
+        pipes(command);
+      }
       if (strcmp(args[0], "exit") == 0) exit(0);
         if (execvp(args[0], args) < 0){
             printf("Could not execute\n");
@@ -110,4 +113,21 @@ void redirect_out(char * line){
   printf("Failed\n");
   close(fd);
   exit(1);
+}
+
+void pipes(char ** args){
+  FILE *in = popen(args[0], "r");
+  if (!in){
+    printf("%s\n", strerror(errno));
+  }
+  FILE *out = popen(args[1], "w");
+  if (!out){
+    printf("%s\n", strerror(errno));
+  }
+  char buffer[100];
+  while (fgets(buffer, 100, in)){
+    fputs(buffer, out);
+  }
+  pclose(in);
+  pclose(out);
 }
