@@ -8,13 +8,6 @@
 #include <sys/stat.h>
 #include <sys/wait.h>
 
-static void sighandler(int signo){
-    if (signo == SIGINT){
-        printf("Terminated\n");
-        exit(0);
-    }
-}
-
 char ** parse_args(char * line, char * delimiter){
     char ** args = malloc(6 * sizeof(char *));
     int i = 0;
