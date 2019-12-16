@@ -40,49 +40,6 @@ char * trim(char * str) {
     return output;
 }
 
-int exec_command(char * command){
-    command = trim(command);
-    printf("%s\n", command);
-    char ** args = parse_args(command, " ");
-    //debugging
-    int i=0;
-    while(args[i] != NULL){
-        i++;
-    }
-    pid_t pid = fork();
-    if (pid == -1){
-        printf("Failed\n");
-        return 0;
-    } else if (pid == 0){
-      if (strchr(command, '<') != NULL){
-        redirect_in(command);
-      }
-      if (strchr(command, '>') != NULL){
-        redirect_out(command);
-      }
-      if (strchr(command, "|") != NULL){
-        pipes(command);
-      }
-      if (strcmp(args[0], "exit") == 0) exit(0);
-        if (execvp(args[0], args) < 0){
-            printf("Could not execute\n");
-        }
-        exit(0);
-    } else {
-        wait(NULL);
-        return 0;
-    }
-}
-
-int exec_multiple(char * command){
-    char ** args = parse_args(command, ";");
-    int i = 0;
-    while(args[i] != NULL){
-        exec_command(args[i]);
-        i++;
-    }
-    return 0;
-}
 
 void redirect_in(char * line){
   char ** parsed = parse_args(line, "<");
@@ -108,7 +65,8 @@ void redirect_out(char * line){
   exit(1);
 }
 
-int pipes(char ** args){
+int pipes(char * command){
+    char ** args = parse_args(command, " ");
   char * input  = args[0];
     char * output = args[1];
     char line[256];
@@ -122,5 +80,56 @@ int pipes(char ** args){
     FILE *write = popen(output,"w");
     fprintf(write,"%s",cmd);
     pclose(write);
+    return 0;
+}
+
+void changeDir(char * command) {
+    char * newDir;
+    char * source;
+    for (int i = 3, j = 0; command[i] != 0; i++) {
+        source[j] = command[i];
+    }
+    strcpy(newDir, source);
+    if (chdir(newDir) != 0) {
+        printf("[%d]: %s\n", errno, strerror(errno));
+    }
+}
+
+int exec_command(char * command){
+    command = trim(command);
+    char ** args = parse_args(command, " ");
+    pid_t pid = fork();
+    if (pid == -1){
+        printf("Failed\n");
+        return 0;
+    } else if (pid == 0){
+      if (strstr(command, "<") != NULL){
+        redirect_in(command);
+      }
+      if (strstr(command, ">") != NULL){
+        redirect_out(command);
+      }
+      if (strstr(command, "|") != NULL){
+        pipes(command);
+      }
+      if (strcmp(args[0], "exit") == 0) exit(0);
+      if (strcmp(args[0], "cd") == 0) changeDir(command);
+        if (execvp(args[0], args) < 0){
+            printf("Could not execute\n");
+        }
+        exit(0);
+    } else {
+        wait(NULL);
+        return 0;
+    }
+}
+
+int exec_multiple(char * command){
+    char ** args = parse_args(command, ";");
+    int i = 0;
+    while(args[i] != NULL){
+        exec_command(args[i]);
+        i++;
+    }
     return 0;
 }
