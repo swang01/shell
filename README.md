@@ -2,8 +2,8 @@
 by Steve Wang and Yifan Wang
 
 # Features:
-  Forks and executes commands
-  Parses multiple commands on one line
+  -Forks and executes commands
+  -Parses multiple commands on one line
   
 # Attempted
   exit() runs, but does not exit out of the shell
