@@ -16,5 +16,6 @@ by Steve Wang and Yifan Wang
   - Putting more than 1 space between the command and its arguments does not run the 
   command.
   - Putting >> does not work
+  - Makefile error when exiting out of the program
   
 
