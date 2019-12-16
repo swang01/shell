@@ -4,9 +4,10 @@ by Steve Wang and Yifan Wang
 # Features:
   - Forks and executes commands
   - Parses multiple commands on one line
+  - Changes directory
   
 # Attempted
-  - exit() runs, but does not exit out of the shell
+  - exit runs, but does not exit out of the shell
   - Tried to implement redirection and piping, but doesn't work ("No such file or 
   directory").
   
