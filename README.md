@@ -20,13 +20,13 @@ by Steve Wang and Yifan Wang
   
   
  # Function Headers
-'''
+```
 static void sighandler(int signo)
 
 Input: int signo
 Output: void, if the signo is SIGINT it exits the process
 Description: Prints "terminated" in the shell and exits the
 shell
-'''
+```
   
 
