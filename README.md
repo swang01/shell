@@ -19,14 +19,14 @@ by Steve Wang and Yifan Wang
   - Makefile error when exiting out of the program
   
   
- #Function Headers
- /*
+ # Function Headers
+'''
 static void sighandler(int signo)
 
 Input: int signo
 Output: void, if the signo is SIGINT it exits the process
 Description: Prints "terminated" in the shell and exits the
 shell
-*/
+'''
   
 
